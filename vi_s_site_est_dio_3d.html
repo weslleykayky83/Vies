@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viés - Um veículo, mil possibilidades | Soluções Turnkey em Veículos Adaptados</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Three.js & OrbitControls CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Tailwind Custom Colors Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            vies: {
+              navy: '#060911',
+              cardBg: '#0d1626',
+              blue: '#0a40ff',
+              darkblue: '#0d1e38',
+              orange: '#ff6b00',
+              cyan: '#00d2ff',
+              green: '#00ff66',
+              accent: '#ff8c33'
+            }
+          },
+          boxShadow: {
+            'glow-orange': '0 0 25px rgba(255, 107, 0, 0.4)',
+            'glow-blue': '0 0 25px rgba(10, 64, 255, 0.4)',
+            'glow-cyan': '0 0 25px rgba(0, 210, 255, 0.4)',
+            'glass': '0 10px 30px rgba(0, 0, 0, 0.7)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060911;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff6b00;
+      border-radius: 4px;
+    }
+
+    /* Synchronized Animated Glowing Dots */
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.4); opacity: 1; }
+    }
+    .dot-orange { animation: pulseDot 1.8s infinite ease-in-out; animation-delay: 0s; box-shadow: 0 0 10px #ff6b00, 0 0 18px #ff6b00; }
+    .dot-blue { animation: pulseDot 1.8s infinite ease-in-out; animation-delay: 0.3s; box-shadow: 0 0 10px #0a40ff, 0 0 18px #0a40ff; }
+    .dot-green { animation: pulseDot 1.8s infinite ease-in-out; animation-delay: 0.6s; box-shadow: 0 0 10px #00ff66, 0 0 18px #00ff66; }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(13, 22, 38, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-orange {
+      background: rgba(13, 22, 38, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 107, 0, 0.35);
+    }
+
+    /* Hotspot Styling */
+    .hotspot-elem {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 107, 0, 0.6);
+      border: 2px solid #ff6b00;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 25;
+      transform: translate(-50%, -50%);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .hotspot-elem::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px solid #ff6b00;
+      animation: pulseHotspot 2s infinite;
+    }
+    @keyframes pulseHotspot {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    .hotspot-elem:hover {
+      transform: translate(-50%, -50%) scale(1.3);
+      background: #ff6b00;
+    }
+  </style>
+</head>
+<body class="bg-[#060911] text-white font-sans antialiased overflow-x-hidden selection:bg-vies-orange selection:text-white">
+
+  <!-- NAVIGATION HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 glass-card border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo Header -->
+      <a href="#hero" class="flex flex-col items-center group text-center">
+        <!-- Logo Name: Pure White -->
+        <span class="text-2xl sm:text-3xl font-black tracking-widest text-white leading-none">VIÉS</span>
+        
+        <!-- Three Synchronized Glowing Dots Centered Directly Below Logo Name -->
+        <div class="flex items-center justify-center gap-1.5 my-1">
+          <span class="w-2 h-2 rounded-full bg-vies-orange dot-orange"></span>
+          <span class="w-2 h-2 rounded-full bg-vies-blue dot-blue"></span>
+          <span class="w-2 h-2 rounded-full bg-vies-green dot-green"></span>
+        </div>
+        
+        <!-- Tagline: Um veículo, mil possibilidades -->
+        <span class="text-[9px] sm:text-[10px] tracking-wider text-gray-300 uppercase font-semibold">Um veículo, mil possibilidades</span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden lg:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-gray-300">
+        <a href="#hero" class="hover:text-vies-orange transition-colors">Início</a>
+        <a href="#sobre-nos" class="hover:text-vies-orange transition-colors">Sobre Nós</a>
+        <a href="#dores" class="hover:text-vies-orange transition-colors">A Dor do Mercado</a>
+        <a href="#ecossistema" class="hover:text-vies-orange transition-colors">Ecossistema Turnkey</a>
+        <a href="#diferenciais" class="hover:text-vies-orange transition-colors">Diferenciais</a>
+        <a href="#estudio-3d" class="text-vies-orange hover:text-white transition-colors flex items-center gap-1.5 font-bold">
+          <span>Estúdio 3D</span>
+          <span class="px-1.5 py-0.5 text-[9px] bg-vies-orange/20 text-vies-orange rounded-full">Pro</span>
+        </a>
+        <a href="#equipe" class="hover:text-vies-orange transition-colors">Nossa Equipe</a>
+      </nav>
+
+      <!-- CTA Button Header -->
+      <div class="hidden sm:flex items-center gap-3">
+        <a href="#estudio-3d" class="px-4 py-2 text-xs font-bold uppercase rounded-full bg-vies-orange text-white hover:bg-vies-accent transition-all shadow-glow-orange flex items-center gap-1.5">
+          <span>Estúdio 3D</span>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Trigger -->
+      <button id="menuBtn" onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-white focus:outline-none p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden glass-card border-b border-white/10 px-6 py-6 space-y-4 text-sm uppercase tracking-wider font-semibold">
+      <a href="#hero" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">Início</a>
+      <a href="#sobre-nos" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">Sobre Nós</a>
+      <a href="#dores" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">A Dor do Processo</a>
+      <a href="#ecossistema" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">Ecossistema Turnkey</a>
+      <a href="#diferenciais" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">Diferenciais</a>
+      <a href="#estudio-3d" onclick="toggleMobileMenu()" class="block text-vies-orange font-bold">Estúdio 3D Interativo</a>
+      <a href="#equipe" onclick="toggleMobileMenu()" class="block hover:text-vies-orange">Nossa Equipe</a>
+      <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20iniciar%20um%20projeto%20com%20a%20Viés." target="_blank" class="block w-full text-center py-3 bg-vies-orange text-white rounded-xl font-bold shadow-glow-orange">
+        Falar no WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden flex items-center justify-center min-h-screen">
+    <div class="absolute inset-0 bg-gradient-to-b from-vies-darkblue/30 via-[#060911] to-[#060911] pointer-events-none"></div>
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-vies-orange/15 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-vies-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <!-- Tag badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-vies-orange/40 mb-8 animate-bounce">
+        <span class="w-2 h-2 rounded-full bg-vies-green animate-pulse"></span>
+        <span class="text-xs font-bold uppercase tracking-widest text-vies-orange">Um Veículo, Mil Possividades</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-none mb-6">
+        Soluções Completas de <br class="hidden sm:inline">
+        <span class="bg-gradient-to-r from-vies-orange via-vies-accent to-vies-cyan bg-clip-text text-transparent">
+          Mobilidade Sob Medida
+        </span>
+      </h1>
+
+      <p class="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto font-normal leading-relaxed mb-10">
+        Desenvolvemos adaptações veiculares para fins profissionais, comerciais e sociais. Do planejamento e engenharia até a legalização final — <strong class="text-white">70% mais rápido</strong>.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <a href="#estudio-3d" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-vies-orange hover:bg-vies-accent text-white font-bold text-base shadow-glow-orange transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+          <span>Abrir Estúdio 3D Pro</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="https://wa.me/5500000000000?text=Olá!%20Vim%20pelo%20site%20da%20Viés%20e%20gostaria%20de%20uma%20cotação." target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-card hover:bg-white/10 text-white font-bold text-base border border-white/20 transition-all flex items-center justify-center gap-2">
+          <span>Solicitar Cotação Turnkey</span>
+        </a>
+      </div>
+
+      <!-- Market Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-vies-orange">
+          <div class="text-xs uppercase tracking-widest text-gray-400 mb-1 font-semibold">Mercado Nacional / Ano</div>
+          <div class="text-4xl font-extrabold text-white mb-2">2,69 Mi</div>
+          <p class="text-xs text-gray-300">Veículos comercializados anualmente no Brasil em expansão constante.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-vies-blue">
+          <div class="text-xs uppercase tracking-widest text-gray-400 mb-1 font-semibold">Carros Comerciais</div>
+          <div class="text-4xl font-extrabold text-vies-cyan mb-2">1,17 Mi</div>
+          <p class="text-xs text-gray-300">Veículos comercializados para frotas, serviços e aplicações operacionais.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-vies-green">
+          <div class="text-xs uppercase tracking-widest text-gray-400 mb-1 font-semibold">Potencial de Adaptação</div>
+          <div class="text-4xl font-extrabold text-vies-green mb-2">117 Mil</div>
+          <p class="text-xs text-gray-300">10 a 15% dessa frota necessita de adaptações técnicas sob medida.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: UM POUCO SOBRE NÓS -->
+  <section id="sobre-nos" class="py-24 relative bg-[#060911] border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Content Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border border-vies-orange/40">
+            <span class="w-2 h-2 rounded-full bg-vies-orange"></span>
+            <span class="text-xs font-bold uppercase tracking-widest text-vies-orange">Quem Somos</span>
+          </div>
+
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight">
+            Um pouco sobre nós
+          </h2>
+
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+            A Viés é uma empresa especializada em soluções completas de mobilidade sob medida, desenvolvendo adaptações veiculares para atender às necessidades dos setores profissionais e comerciais. Nosso trabalho começa com a identificação das necessidades de cada cliente e segue por todas as etapas: planejamento, engenharia, personalização e entrega do veículo devidamente regularizado.
+          </p>
+
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+            Acreditamos que cada veículo pode oferecer novas possibilidades. Por isso, unimos inovação, mão de obra especializada e qualidade técnica para transformar veículos convencionais em soluções funcionais, seguras e personalizadas. Mais do que adaptar veículos, nosso propósito é proporcionar autonomia, praticidade e novas oportunidades para pessoas e negócios.
+          </p>
+        </div>
+
+        <!-- Mission Card Column -->
+        <div class="lg:col-span-5">
+          <div class="glass-card-orange rounded-3xl p-8 sm:p-10 relative overflow-hidden shadow-glow-orange flex flex-col justify-between min-h-[380px]">
+            <div class="w-12 h-12 rounded-xl bg-vies-orange/20 border border-vies-orange text-vies-orange flex items-center justify-center text-xl font-bold mb-6">
+              🚀
+            </div>
+            
+            <div class="space-y-4">
+              <span class="text-xs font-black uppercase tracking-widest text-vies-orange">Nossa Missão</span>
+              <blockquote class="text-lg sm:text-xl font-bold text-white leading-snug">
+                “Nossa missão é ir além da mobilidade, é abrir caminhos para novas possibilidades. Cada adaptação abre um caminho e cada solução transforma uma realidade!”
+              </blockquote>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/10 flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-vies-orange dot-orange"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-vies-blue dot-blue"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-vies-green dot-green"></span>
+              </div>
+              <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Um veículo, mil possibilidades</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: A DOR DO PROCESSO TRADICIONAL -->
+  <section id="dores" class="py-24 relative bg-[#080c17]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-vies-orange mb-3">O Problema Atual</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-white">A Dor do Processo Tradicional</p>
+        <p class="text-gray-400 text-sm mt-3">Comprar e adaptar um veículo no formato convencional gera retrabalho, atrasos e incerteza regulatória.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div class="glass-card rounded-2xl p-8 relative overflow-hidden group hover:border-vies-orange/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-vies-orange/10 border border-vies-orange/30 flex items-center justify-center text-vies-orange text-xl font-bold mb-6">
+            A
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Veículo Cru</h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Aquisição de veículos sem especificações técnicas adequadas para o uso comercial, social ou acessível desejado.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 relative overflow-hidden group hover:border-vies-orange/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-vies-orange/10 border border-vies-orange/30 flex items-center justify-center text-vies-orange text-xl font-bold mb-6">
+            B
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Burocracia Exaustiva</h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Oficinas fragmentadas, falta de padronização, homologações complexas e barreiras regulatórias do CONTRAN.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 relative overflow-hidden group hover:border-vies-orange/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-vies-orange/10 border border-vies-orange/30 flex items-center justify-center text-vies-orange text-xl font-bold mb-6">
+            C
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Alto Custo de Tempo</h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Perda de receita por veículo parado e atrasos severos na coordenação entre múltiplos fornecedores.
+          </p>
+        </div>
+      </div>
+
+      <div class="glass-card-orange rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-block text-xs font-bold uppercase tracking-widest text-vies-orange mb-2">A Resposta Viés</div>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-4">Eliminamos a Fragmentação com o Modelo Turnkey</h3>
+          <p class="text-sm text-gray-300">Entregamos seu veículo 100% projetado, adaptado, aprovado e regularizado conforme a Lei Federal nº 9.503/1997. Você recebe a chave pronta para rodar.</p>
+        </div>
+        <div class="flex-shrink-0 text-center bg-vies-orange text-white px-8 py-6 rounded-2xl shadow-glow-orange">
+          <div class="text-4xl sm:text-5xl font-black">70%</div>
+          <div class="text-xs uppercase font-extrabold tracking-wider">Mais Rápido Que o Processo Tradicional</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: ECOSSISTEMA TURNKEY -->
+  <section id="ecossistema" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-vies-cyan mb-3">Engenharia End-to-End</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-white">O Ecossistema Turnkey na Viés</p>
+        <p class="text-gray-400 text-sm mt-3">Quatro etapas integradas em um único interlocutor de confiança.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-vies-orange flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-vies-orange uppercase tracking-widest">Etapa 01</span>
+            <h3 class="text-xl font-bold text-white mt-1 mb-3">Mapeamento Exato</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Identificamos a necessidade real do cliente antes mesmo da aquisição do veículo.
+            </p>
+          </div>
+          <div class="mt-6 text-2xl font-black text-white/20">01</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-vies-cyan flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-vies-cyan uppercase tracking-widest">Etapa 02</span>
+            <h3 class="text-xl font-bold text-white mt-1 mb-3">Projeto de Engenharia</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Desenvolvimento voltado especificamente para acessibilidade, comércio ou serviços.
+            </p>
+          </div>
+          <div class="mt-6 text-2xl font-black text-white/20">02</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-vies-blue flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Etapa 03</span>
+            <h3 class="text-xl font-bold text-white mt-1 mb-3">Personalização</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Execução especializada com acabamento profissional e alto rigor técnico.
+            </p>
+          </div>
+          <div class="mt-6 text-2xl font-black text-white/20">03</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-vies-green flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-vies-green uppercase tracking-widest">Etapa 04</span>
+            <h3 class="text-xl font-bold text-white mt-1 mb-3">Entrega Legalizada</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Pronto para rodar, regularizado conforme a Lei Federal nº 9.503/1997.
+            </p>
+          </div>
+          <div class="mt-6 text-2xl font-black text-white/20">04</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: DIFERENCIAIS COMPETITIVOS -->
+  <section id="diferenciais" class="py-24 relative bg-[#080c17]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-vies-orange mb-3">Por Que a Viés?</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-white">Diferenciais Competitivos</p>
+        <p class="text-gray-400 text-sm mt-3">Estrutura que amplia e acelera novos negócios e frotas operacionais.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6 hover:border-vies-orange/40 transition-all">
+          <div class="w-10 h-10 rounded-lg bg-vies-orange/20 text-vies-orange flex items-center justify-center text-lg mb-4">⚡</div>
+          <h3 class="text-lg font-bold text-white mb-2">70% Mais Rápido</h3>
+          <p class="text-xs text-gray-300">Processo unificado que reduz o tempo entre o pedido e a entrega final do veículo.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 hover:border-vies-orange/40 transition-all">
+          <div class="w-10 h-10 rounded-lg bg-vies-cyan/20 text-vies-cyan flex items-center justify-center text-lg mb-4">🛠️</div>
+          <h3 class="text-lg font-bold text-white mb-2">Mão de Obra Especializada</h3>
+          <p class="text-xs text-gray-300">Engenheiros e montadores continuamente capacitados dentro dos padrões de montagem.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 hover:border-vies-orange/40 transition-all">
+          <div class="w-10 h-10 rounded-lg bg-vies-green/20 text-vies-green flex items-center justify-center text-lg mb-4">⚖️</div>
+          <h3 class="text-lg font-bold text-white mb-2">Segurança Jurídica</h3>
+          <p class="text-xs text-gray-300">Homologação completa e documentação regularizada no Detran e CONTRAN.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 hover:border-vies-orange/40 transition-all">
+          <div class="w-10 h-10 rounded-lg bg-vies-blue/20 text-blue-400 flex items-center justify-center text-lg mb-4">🤝</div>
+          <h3 class="text-lg font-bold text-white mb-2">Praticidade e Comodidade</h3>
+          <p class="text-xs text-gray-300">Um único ponto de contato para a aquisição, engenharia, projeto e legalização.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 hover:border-vies-orange/40 transition-all sm:col-span-2 lg:col-span-2">
+          <div class="w-10 h-10 rounded-lg bg-vies-orange/20 text-vies-orange flex items-center justify-center text-lg mb-4">📈</div>
+          <h3 class="text-lg font-bold text-white mb-2">Estrutura que Amplia outros Negócios</h3>
+          <p class="text-xs text-gray-300">Entregamos soluções sob medida projetadas para gerar lucro imediato, autonomia operacional e expansão de frotas acessíveis e comerciais.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: ESTÚDIO 3D PRO (THREE.JS ENHANCED) -->
+  <section id="estudio-3d" class="py-20 relative bg-[#04060c] border-y border-white/10">
+    
+    <!-- Studio Header Toolbar -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-vies-orange animate-ping"></span>
+          <span class="text-xs font-extrabold uppercase tracking-widest text-vies-orange">Estúdio Virtual 3D High-End</span>
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white">Estúdio 3D Interativo Viés</h2>
+        <p class="text-xs sm:text-sm text-gray-400 mt-2 max-w-2xl">Pintura metálica ultra-realista, climatizador de teto, retrovisores, faróis LED, banco giratório, rampa, cadeira de rodas animada e luzes internas.</p>
+      </div>
+
+      <!-- Color Pickers Header Bar -->
+      <div class="flex items-center gap-4 flex-wrap">
+        <!-- Body Paint Selector -->
+        <div class="flex items-center gap-2 bg-vies-cardBg px-3 py-2 rounded-full border border-white/10">
+          <span class="text-[10px] text-gray-400 uppercase font-bold">Pintura:</span>
+          <button onclick="changeColor3D(0x0d1e38, this)" class="w-5 h-5 rounded-full bg-[#0d1e38] border-2 border-white ring-2 ring-vies-orange transition-transform hover:scale-110" title="Azul Escuro Viés"></button>
+          <button onclick="changeColor3D(0xff6b00, this)" class="w-5 h-5 rounded-full bg-[#ff6b00] border-2 border-transparent transition-transform hover:scale-110" title="Laranja Viés"></button>
+          <button onclick="changeColor3D(0x111111, this)" class="w-5 h-5 rounded-full bg-[#111111] border-2 border-transparent transition-transform hover:scale-110" title="Preto Premium"></button>
+          <button onclick="changeColor3D(0xe0e0e0, this)" class="w-5 h-5 rounded-full bg-[#e0e0e0] border-2 border-transparent transition-transform hover:scale-110" title="Branco Operacional"></button>
+        </div>
+
+        <!-- Studio Floor Ring LED Selector -->
+        <div class="flex items-center gap-2 bg-vies-cardBg px-3 py-2 rounded-full border border-white/10">
+          <span class="text-[10px] text-gray-400 uppercase font-bold">Ring LED:</span>
+          <button onclick="changeRingLED(0xff6b00)" class="w-4 h-4 rounded-full bg-[#ff6b00] hover:scale-125 transition-transform" title="Ring Laranja"></button>
+          <button onclick="changeRingLED(0x0a40ff)" class="w-4 h-4 rounded-full bg-[#0a40ff] hover:scale-125 transition-transform" title="Ring Azul"></button>
+          <button onclick="changeRingLED(0x00ff66)" class="w-4 h-4 rounded-full bg-[#00ff66] hover:scale-125 transition-transform" title="Ring Verde"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Viewport Box -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative w-full h-[620px] sm:h-[720px] rounded-3xl overflow-hidden border border-white/15 glass-card shadow-glass">
+        
+        <!-- Canvas Element -->
+        <div id="canvas-3d-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+        <!-- Dynamic Hotspot Info Card Overlay -->
+        <div id="infoCard3D" class="absolute top-6 right-6 w-80 sm:w-96 glass-card-orange rounded-2xl p-6 z-30 transform translate-x-[450px] transition-transform duration-500 shadow-glass">
+          <button onclick="closeInfoCard3D()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+          <span id="cardTag3D" class="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-vies-orange/20 text-vies-orange rounded-md mb-2">Engenharia Viés</span>
+          <h3 id="cardTitle3D" class="text-xl font-bold text-white mb-2">Título do Componente</h3>
+          <p id="cardDesc3D" class="text-xs text-gray-300 leading-relaxed mb-6">Descrição técnica e especificações da adaptação turnkey do veículo.</p>
+          <a id="cardCta3D" href="#" target="_blank" class="w-full block text-center py-3 bg-vies-orange hover:bg-vies-accent text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-glow-orange transition-colors">
+            💬 Solicitar Cotação deste Item
+          </a>
+        </div>
+
+        <!-- Controls Toolbar Overlay -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 glass-card px-4 py-3 rounded-full border border-white/20 flex items-center gap-2 flex-wrap justify-center max-w-[95%] shadow-glass">
+          <!-- Guided Cinematic Tour -->
+          <button id="btnTour" onclick="toggleCinematicTour()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-vies-orange text-white hover:bg-vies-accent transition-all flex items-center gap-1.5 shadow-glow-orange">
+            <span>🎬</span> <span id="lblTour">Tour Guiado</span>
+          </button>
+
+          <!-- Animated Wheelchair -->
+          <button id="btnWheelchair" onclick="toggleWheelchairBoarding()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>♿</span> <span id="lblWheelchair">Cadeira de Rodas</span>
+          </button>
+
+          <!-- Swivel Seat -->
+          <button id="btnSwivel" onclick="toggleSwivelSeat3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>💺</span> <span>Banco Giratório</span>
+          </button>
+
+          <!-- Rear Ramp -->
+          <button id="btnRamp" onclick="toggleRamp3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>⚙️</span> <span id="lblRamp">Rampa Traseira</span>
+          </button>
+
+          <!-- Side Door -->
+          <button id="btnDoor" onclick="toggleDoor3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>🚪</span> <span>Porta Lateral</span>
+          </button>
+
+          <!-- X-Ray Mode -->
+          <button id="btnXRay" onclick="toggleXRay3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>🔍</span> <span>Modo Raio-X</span>
+          </button>
+
+          <!-- Cabin Interior LED -->
+          <button id="btnInteriorLED" onclick="toggleInteriorLED3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>💡</span> <span>LED Interno</span>
+          </button>
+
+          <!-- Giroflex Beacon -->
+          <button id="btnBeacon" onclick="toggleBeacon3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-orange hover:text-white transition-all flex items-center gap-1.5 border border-white/10">
+            <span>🚨</span> <span>Giroflex</span>
+          </button>
+
+          <!-- Reset View -->
+          <button onclick="resetCamera3D()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-white/10 hover:bg-vies-cyan hover:text-black transition-all border border-white/10">
+            🎯 Reset
+          </button>
+        </div>
+
+        <!-- Hotspot Floating Elements -->
+        <div id="hotspot-3d-1" class="hotspot-elem" onclick="selectHotspot3D(0)">1</div>
+        <div id="hotspot-3d-2" class="hotspot-elem" onclick="selectHotspot3D(1)">2</div>
+        <div id="hotspot-3d-3" class="hotspot-elem" onclick="selectHotspot3D(2)">3</div>
+        <div id="hotspot-3d-4" class="hotspot-elem" onclick="selectHotspot3D(3)">4</div>
+        <div id="hotspot-3d-5" class="hotspot-elem" onclick="selectHotspot3D(4)">5</div>
+        <div id="hotspot-3d-6" class="hotspot-elem" onclick="selectHotspot3D(5)">6</div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: NOSSA EQUIPE -->
+  <section id="equipe" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-extrabold tracking-widest text-vies-orange mb-3">Liderança & Governança</h2>
+        <p class="text-3xl sm:text-4xl font-bold text-white">Conheça Nossa Equipe</p>
+        <p class="text-gray-400 text-sm mt-3">Diretoria técnica e executiva guiando a engenharia de precisão Viés.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-vies-orange/20 border-2 border-vies-orange text-vies-orange font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            T
+          </div>
+          <h3 class="text-lg font-bold text-white">Thales</h3>
+          <p class="text-xs font-semibold text-vies-orange uppercase tracking-wider mt-1">Diretor Executivo</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-400 text-blue-400 font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            MC
+          </div>
+          <h3 class="text-lg font-bold text-white">Maria Lúcia Ciabotti</h3>
+          <p class="text-xs font-semibold text-vies-cyan uppercase tracking-wider mt-1">Diretora de Operações e Produções</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-vies-green/20 border-2 border-vies-green text-vies-green font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            BM
+          </div>
+          <h3 class="text-lg font-bold text-white">Bruna Marquez</h3>
+          <p class="text-xs font-semibold text-vies-green uppercase tracking-wider mt-1">Diretora de Qualidade e Legalização</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-vies-orange/20 border-2 border-vies-orange text-vies-orange font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            E
+          </div>
+          <h3 class="text-lg font-bold text-white">Eduardo</h3>
+          <p class="text-xs font-semibold text-vies-orange uppercase tracking-wider mt-1">Diretor Comercial e de Vendas</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-purple-500/20 border-2 border-purple-400 text-purple-400 font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            KC
+          </div>
+          <h3 class="text-lg font-bold text-white">Kerolyn Cardoso</h3>
+          <p class="text-xs font-semibold text-purple-300 uppercase tracking-wider mt-1">Diretora de Projetos e Design</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all">
+          <div class="w-20 h-20 rounded-full bg-yellow-500/20 border-2 border-yellow-400 text-yellow-400 font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            JN
+          </div>
+          <h3 class="text-lg font-bold text-white">Júlia Navarro</h3>
+          <p class="text-xs font-semibold text-yellow-300 uppercase tracking-wider mt-1">Diretora de Compras e Financeiro</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 text-center group hover:border-vies-orange/50 transition-all sm:col-span-2 lg:col-span-2">
+          <div class="w-20 h-20 rounded-full bg-pink-500/20 border-2 border-pink-400 text-pink-400 font-black text-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+            WB
+          </div>
+          <h3 class="text-lg font-bold text-white">Wendy Basílio</h3>
+          <p class="text-xs font-semibold text-pink-300 uppercase tracking-wider mt-1">Diretora de Marketing</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#04060b] border-t border-white/10 pt-16 pb-12 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div class="space-y-4">
+          <div class="flex flex-col items-start">
+            <span class="text-2xl font-black tracking-widest text-white leading-none">VIÉS</span>
+            <div class="flex items-center justify-center gap-1.5 my-1.5">
+              <span class="w-2 h-2 rounded-full bg-vies-orange dot-orange"></span>
+              <span class="w-2 h-2 rounded-full bg-vies-blue dot-blue"></span>
+              <span class="w-2 h-2 rounded-full bg-vies-green dot-green"></span>
+            </div>
+            <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Um veículo, mil possibilidades</span>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Soluções completas de mobilidade sob medida para fins profissionais, comerciais e sociais.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-4">Navegação</h4>
+          <ul class="space-y-2 text-xs text-gray-400">
+            <li><a href="#hero" class="hover:text-vies-orange">Início</a></li>
+            <li><a href="#sobre-nos" class="hover:text-vies-orange">Sobre Nós</a></li>
+            <li><a href="#dores" class="hover:text-vies-orange">A Dor do Mercado</a></li>
+            <li><a href="#ecossistema" class="hover:text-vies-orange">Ecossistema Turnkey</a></li>
+            <li><a href="#diferenciais" class="hover:text-vies-orange">Diferenciais</a></li>
+            <li><a href="#estudio-3d" class="hover:text-vies-orange">Estúdio 3D Pro</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-4">Regulamentação</h4>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Veículos homologados e regularizados em estrita conformidade com a <strong class="text-white">Lei Federal nº 9.503/1997</strong> (Código de Trânsito Brasileiro).
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-widest mb-4">Contato Comercial</h4>
+          <a href="https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20fazer%20uma%20cotação%20com%20a%20Viés." target="_blank" class="w-full inline-block text-center py-3 px-4 bg-vies-orange hover:bg-vies-accent text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-glow-orange">
+            💬 Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-500 gap-4">
+        <p>© 2026 Viés. Todos os direitos reservados. Um veículo, mil possibilidades.</p>
+        <p>Desenvolvido com Engine 3D Three.js WebGL</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPT THREE.JS 3D ENGINE & SITE LOGIC -->
+  <script>
+    // --- UI NAVIGATION MOBILE ---
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    // --- THREE.JS HIGH-END 3D STUDIO ---
+    const studioContainer = document.getElementById('canvas-3d-container');
+
+    // 1. Scene, Camera & WebGL Renderer Setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x060911);
+    scene.fog = new THREE.FogExp2(0x060911, 0.032);
+
+    const camera = new THREE.PerspectiveCamera(45, studioContainer.clientWidth / studioContainer.clientHeight, 0.1, 1000);
+    let targetCameraPos = { x: 5.5, y: 2.8, z: 6.5 };
+    let targetLookAt = { x: 0, y: 0.8, z: 0 };
+    camera.position.set(targetCameraPos.x, targetCameraPos.y, targetCameraPos.z);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(studioContainer.clientWidth, studioContainer.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.3;
+    studioContainer.appendChild(renderer.domElement);
+
+    // Orbit Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2 - 0.01;
+    controls.minDistance = 2.2;
+    controls.maxDistance = 14;
+    controls.target.set(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+
+    // 2. High-End Lighting Design
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+    scene.add(ambientLight);
+
+    const topLight = new THREE.SpotLight(0xffffff, 2.5);
+    topLight.position.set(0, 10, 3);
+    topLight.angle = Math.PI / 4;
+    topLight.penumbra = 0.8;
+    topLight.castShadow = true;
+    topLight.shadow.mapSize.width = 2048;
+    topLight.shadow.mapSize.height = 2048;
+    scene.add(topLight);
+
+    const orangeFill = new THREE.PointLight(0xff6b00, 2.2, 20);
+    orangeFill.position.set(-6, 4, -3);
+    scene.add(orangeFill);
+
+    const blueRim = new THREE.PointLight(0x0a40ff, 2.8, 20);
+    blueRim.position.set(6, 4, -4);
+    scene.add(blueRim);
+
+    // Vehicle Headlights
+    const headlightL = new THREE.SpotLight(0x00d2ff, 0, 15, Math.PI / 6, 0.5);
+    headlightL.position.set(-0.6, 0.75, 2.3);
+    headlightL.target.position.set(-0.6, 0.5, 10);
+    scene.add(headlightL);
+    scene.add(headlightL.target);
+
+    const headlightR = new THREE.SpotLight(0x00d2ff, 0, 15, Math.PI / 6, 0.5);
+    headlightR.position.set(0.6, 0.75, 2.3);
+    headlightR.target.position.set(0.6, 0.5, 10);
+    scene.add(headlightR);
+    scene.add(headlightR.target);
+
+    // Emergency Flashing Beacon Light
+    const beaconLight = new THREE.PointLight(0xff0000, 0, 10);
+    beaconLight.position.set(0, 2.0, 0.8);
+    scene.add(beaconLight);
+
+    // Cabin Interior LED Light
+    const cabinLED = new THREE.PointLight(0xffffff, 0, 6);
+    cabinLED.position.set(0, 1.4, 0.5);
+    scene.add(cabinLED);
+
+    // 3. Studio Stage & Dynamic Floor Ring
+    const floorGeo = new THREE.PlaneGeometry(100, 100);
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x0a101d, roughness: 0.15, metalness: 0.6 });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const stageGeo = new THREE.CylinderGeometry(3.6, 3.8, 0.15, 64);
+    const stageMat = new THREE.MeshStandardMaterial({ color: 0x111929, roughness: 0.3, metalness: 0.8 });
+    const stage = new THREE.Mesh(stageGeo, stageMat);
+    stage.position.y = 0.075;
+    stage.receiveShadow = true;
+    stage.castShadow = true;
+    scene.add(stage);
+
+    // Dynamic Floor Ring LED
+    const ringGeo = new THREE.RingGeometry(3.5, 3.56, 64);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xff6b00, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.151;
+    scene.add(ring);
+
+    // 4. Ultra-Detailed Vehicle Model
+    const vehicleGroup = new THREE.Group();
+    let currentBodyColor = 0x0d1e38; // Azul Escuro Viés
+
+    // Materials using MeshPhysicalMaterial for Automotive Clearcoat Metallic Paint
+    const bodyMat = new THREE.MeshPhysicalMaterial({
+      color: currentBodyColor,
+      metalness: 0.85,
+      roughness: 0.2,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.1,
+      reflectivity: 0.9
+    });
+
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0x050b14,
+      transparent: true,
+      opacity: 0.55,
+      roughness: 0.1,
+      transmission: 0.85
+    });
+
+    const orangeMat = new THREE.MeshStandardMaterial({ color: 0xff6b00, metalness: 0.4, roughness: 0.3 });
+    const interiorMat = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.7 });
+    const dashboardMat = new THREE.MeshStandardMaterial({ color: 0x14171d, roughness: 0.5 });
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.8 });
+    const rampMat = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.8, roughness: 0.4 });
+    const beaconMat = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.2, emissive: 0x330000 });
+    const headlampLensMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00d2ff, emissiveIntensity: 0.5 });
+    const taillampLensMat = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0x880000, emissiveIntensity: 0.8 });
+
+    // Main Body Components
+    const bodyGeo = new THREE.BoxGeometry(1.8, 1.4, 3.6);
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = 1.1;
+    body.castShadow = true;
+    vehicleGroup.add(body);
+
+    const cabinGeo = new THREE.BoxGeometry(1.78, 1.1, 1.0);
+    const cabin = new THREE.Mesh(cabinGeo, bodyMat);
+    cabin.position.set(0, 0.95, 1.8);
+    cabin.castShadow = true;
+    vehicleGroup.add(cabin);
+
+    // Windshield & Glass
+    const windshieldGeo = new THREE.PlaneGeometry(1.6, 0.8);
+    const windshield = new THREE.Mesh(windshieldGeo, glassMat);
+    windshield.position.set(0, 1.2, 2.31);
+    vehicleGroup.add(windshield);
+
+    // --- NOVO DETALHAMENTO EXTERNO DO VEÍCULO ---
+
+    // 1. Retrovisores Laterais
+    const mirrorStemGeo = new THREE.BoxGeometry(0.15, 0.04, 0.06);
+    const mirrorBoxGeo = new THREE.BoxGeometry(0.08, 0.22, 0.15);
+
+    // Left Mirror
+    const mirrorL = new THREE.Group();
+    mirrorL.position.set(-0.95, 1.15, 1.8);
+    mirrorL.add(new THREE.Mesh(mirrorStemGeo, bodyMat));
+    const mBoxL = new THREE.Mesh(mirrorBoxGeo, bodyMat);
+    mBoxL.position.x = -0.1;
+    mirrorL.add(mBoxL);
+    vehicleGroup.add(mirrorL);
+
+    // Right Mirror
+    const mirrorR = new THREE.Group();
+    mirrorR.position.set(0.95, 1.15, 1.8);
+    mirrorR.add(new THREE.Mesh(mirrorStemGeo, bodyMat));
+    const mBoxR = new THREE.Mesh(mirrorBoxGeo, bodyMat);
+    mBoxR.position.x = 0.1;
+    mirrorR.add(mBoxR);
+    vehicleGroup.add(mirrorR);
+
+    // 2. Climatizador de Teto (Ar-Condicionado de Van)
+    const acUnitGeo = new THREE.BoxGeometry(0.9, 0.16, 0.9);
+    const acUnit = new THREE.Mesh(acUnitGeo, bodyMat);
+    acUnit.position.set(0, 1.88, -0.4);
+    acUnit.castShadow = true;
+    vehicleGroup.add(acUnit);
+
+    // 3. Faróis Dianteiros LED (Lentes Emissivas)
+    const hLensGeo = new THREE.BoxGeometry(0.32, 0.12, 0.05);
+    const hLensL = new THREE.Mesh(hLensGeo, headlampLensMat);
+    hLensL.position.set(-0.6, 0.75, 2.31);
+    vehicleGroup.add(hLensL);
+
+    const hLensR = new THREE.Mesh(hLensGeo, headlampLensMat);
+    hLensR.position.set(0.6, 0.75, 2.31);
+    vehicleGroup.add(hLensR);
+
+    // 4. Lanternas Traseiras (Lentes Vermelhas Emissivas)
+    const tLensGeo = new THREE.BoxGeometry(0.28, 0.4, 0.04);
+    const tLensL = new THREE.Mesh(tLensGeo, taillampLensMat);
+    tLensL.position.set(-0.75, 1.1, -1.81);
+    vehicleGroup.add(tLensL);
+
+    const tLensR = new THREE.Mesh(tLensGeo, taillampLensMat);
+    tLensR.position.set(0.75, 1.1, -1.81);
+    vehicleGroup.add(tLensR);
+
+    // --- DETALHAMENTO INTERNO COMPLETO DA CABINE ---
+    const interiorGroup = new THREE.Group();
+
+    // Dashboard & Console
+    const dash = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.4, 0.5), dashboardMat);
+    dash.position.set(0, 0.95, 1.85);
+    interiorGroup.add(dash);
+
+    const centerConsole = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 0.4), orangeMat);
+    centerConsole.position.set(0, 0.75, 1.7);
+    interiorGroup.add(centerConsole);
+
+    // Steering Column & Wheel
+    const steeringColumn = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.3), dashboardMat);
+    steeringColumn.position.set(-0.45, 0.9, 1.75);
+    steeringColumn.rotation.x = Math.PI / 4;
+    interiorGroup.add(steeringColumn);
+
+    const steeringWheel = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.03, 16, 32), dashboardMat);
+    steeringWheel.position.set(-0.45, 1.0, 1.65);
+    steeringWheel.rotation.x = Math.PI / 4;
+    interiorGroup.add(steeringWheel);
+
+    // Driver & Passenger Front Seats
+    const driverSeatBase = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.5), interiorMat);
+    driverSeatBase.position.set(-0.45, 0.6, 1.4);
+    interiorGroup.add(driverSeatBase);
+    const driverSeatBack = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), interiorMat);
+    driverSeatBack.position.set(-0.45, 0.95, 1.15);
+    interiorGroup.add(driverSeatBack);
+
+    const passengerSeatBase = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.5), interiorMat);
+    passengerSeatBase.position.set(0.45, 0.6, 1.4);
+    interiorGroup.add(passengerSeatBase);
+    const passengerSeatBack = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, 0.1), interiorMat);
+    passengerSeatBack.position.set(0.45, 0.95, 1.15);
+    interiorGroup.add(passengerSeatBack);
+
+    // --- BANCO GIRATÓRIO ELETRÔNICO ---
+    const swivelSeatGroup = new THREE.Group();
+    swivelSeatGroup.position.set(0.4, 0.5, 0.2);
+    interiorGroup.add(swivelSeatGroup);
+
+    const basePivot = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.28, 0.1, 32), orangeMat);
+    swivelSeatGroup.add(basePivot);
+
+    const seatBodyGroup = new THREE.Group();
+    swivelSeatGroup.add(seatBodyGroup);
+
+    const sSeatBase = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.18, 0.55), orangeMat);
+    sSeatBase.position.y = 0.15;
+    seatBodyGroup.add(sSeatBase);
+
+    const sSeatBack = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.65, 0.1), orangeMat);
+    sSeatBack.position.set(0, 0.5, -0.22);
+    seatBodyGroup.add(sSeatBack);
+
+    const armL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.4), dashboardMat);
+    armL.position.set(-0.3, 0.4, 0);
+    seatBodyGroup.add(armL);
+    const armR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.4), dashboardMat);
+    armR.position.set(0.3, 0.4, 0);
+    seatBodyGroup.add(armR);
+
+    // --- CADEIRA DE RODAS ANIMADA (3D MODEL) ---
+    const wheelchairGroup = new THREE.Group();
+    wheelchairGroup.position.set(0, 0.45, -0.8); // Inicialmente no salão interno
+
+    // Wheels of Wheelchair
+    const wcWheelGeo = new THREE.TorusGeometry(0.22, 0.02, 16, 32);
+    const wcWheelL = new THREE.Mesh(wcWheelGeo, wheelMat);
+    wcWheelL.position.set(-0.26, 0.22, 0);
+    wcWheelL.rotation.y = Math.PI / 2;
+    wheelchairGroup.add(wcWheelL);
+
+    const wcWheelR = new THREE.Mesh(wcWheelGeo, wheelMat);
+    wcWheelR.position.set(0.26, 0.22, 0);
+    wcWheelR.rotation.y = Math.PI / 2;
+    wheelchairGroup.add(wcWheelR);
+
+    // Frame & Seat
+    const wcFrameMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9, roughness: 0.2 });
+    const wcSeatMat = new THREE.MeshStandardMaterial({ color: 0xff6b00, roughness: 0.5 });
+
+    const wcSeat = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.05, 0.44), wcSeatMat);
+    wcSeat.position.set(0, 0.25, 0);
+    wheelchairGroup.add(wcSeat);
+
+    const wcBack = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.4, 0.04), wcSeatMat);
+    wcBack.position.set(0, 0.48, -0.2);
+    wheelchairGroup.add(wcBack);
+
+    const wcHandleL = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.2), wcFrameMat);
+    wcHandleL.position.set(-0.18, 0.7, -0.25);
+    wcHandleL.rotation.x = Math.PI / 4;
+    wheelchairGroup.add(wcHandleL);
+
+    const wcHandleR = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.2), wcFrameMat);
+    wcHandleR.position.set(0.18, 0.7, -0.25);
+    wcHandleR.rotation.x = Math.PI / 4;
+    wheelchairGroup.add(wcHandleR);
+
+    interiorGroup.add(wheelchairGroup);
+    vehicleGroup.add(interiorGroup);
+
+    // Rodas da Van
+    const wheelGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 32);
+    wheelGeo.rotateZ(Math.PI / 2);
+    const wheelPositions = [[-0.85, 0.35, 1.4], [0.85, 0.35, 1.4], [-0.85, 0.35, -1.2], [0.85, 0.35, -1.2]];
+    wheelPositions.forEach(pos => {
+      const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+      wheel.position.set(...pos);
+      wheel.castShadow = true;
+      vehicleGroup.add(wheel);
+    });
+
+    // Giroflex de Teto
+    const beaconBar = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.2), beaconMat);
+    beaconBar.position.set(0, 1.84, 0.8);
+    vehicleGroup.add(beaconBar);
+
+    // Porta Lateral e Estribo
+    const sideDoorGroup = new THREE.Group();
+    sideDoorGroup.position.set(0.91, 1.1, 0.2);
+    vehicleGroup.add(sideDoorGroup);
+    sideDoorGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.2, 1.2), bodyMat));
+
+    const stepGroup = new THREE.Group();
+    stepGroup.position.set(0.85, 0.25, 0.2);
+    vehicleGroup.add(stepGroup);
+    stepGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.04, 1.0), rampMat));
+
+    // Rampa Articulada Traseira
+    const rampPivot = new THREE.Group();
+    rampPivot.position.set(0, 0.4, -1.8);
+    vehicleGroup.add(rampPivot);
+
+    const rampMesh = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.04, 1.6), rampMat);
+    rampMesh.position.set(0, 0, -0.8);
+    rampMesh.castShadow = true;
+    rampPivot.add(rampMesh);
+
+    const edgeL = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 1.6), orangeMat);
+    edgeL.position.set(-0.6, 0.04, -0.8);
+    rampPivot.add(edgeL);
+
+    const edgeR = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 1.6), orangeMat);
+    edgeR.position.set(0.6, 0.04, -0.8);
+    rampPivot.add(edgeR);
+
+    // Dynamic Animation States
+    let rampOpen = false;
+    let targetRampRotation = 1.5;
+    rampPivot.rotation.x = targetRampRotation;
+
+    let sideDoorOpen = false;
+    let targetDoorZ = 0.2;
+    let targetStepX = 0.85;
+
+    let swivelSeatOut = false;
+    let targetSwivelRotation = 0;
+    let targetSwivelX = 0;
+
+    let wheelchairBoarded = false; // Embarcada ou Desembarcada
+    let targetWcZ = -0.8;
+    let targetWcY = 0.45;
+
+    let giroflexOn = false;
+    let isXray = false;
+    let isInteriorLEDOn = false;
+    let isCinematicTourActive = false;
+    let tourStep = 0;
+    let tourTimer = null;
+
+    scene.add(vehicleGroup);
+
+    // 5. Hotspot Technical Data with WhatsApp CTA Mapping
+    const whatsappPhone = "5500000000000";
+    const hotspotsData = [
+      {
+        position: new THREE.Vector3(0.5, 0.8, 0.2),
+        title: "Banco Giratório Eletrônico",
+        tag: "Acessibilidade VIP",
+        desc: "Assento ergonômico com giro elétrico de 90° e projeção externa, facilitando a transferência com máxima segurança.",
+        msg: "Olá! Gostaria de uma cotação do Banco Giratório Eletrônico de Transferência Viés.",
+        camPos: { x: 2.8, y: 1.4, z: 0.8 },
+        lookAt: { x: 0.4, y: 0.8, z: 0.2 }
+      },
+      {
+        position: new THREE.Vector3(0, 0.4, -2.6),
+        title: "Cadeira de Rodas & Rampa Eletro-Hidráulica",
+        tag: "Engenharia Turnkey",
+        desc: "Sistema de rampa dobrável antiderrapante com desembarque suave para cadeiras de rodas motorizadas e manuais.",
+        msg: "Olá! Gostaria de cotação para o Kit de Rampa Traseira e Adaptação de Cadeira de Rodas.",
+        camPos: { x: -3.2, y: 1.8, z: -3.8 },
+        lookAt: { x: 0, y: 0.5, z: -2.0 }
+      },
+      {
+        position: new THREE.Vector3(-0.4, 1.0, 1.6),
+        title: "Cabine & Cockpit com Comando Manual",
+        tag: "Ergonomia de Direção",
+        desc: "Painel original integrado com retrovisores reforçados e comandos manuais de aceleração/frenagem.",
+        msg: "Olá! Gostaria de detalhes sobre a Adaptação de Cockpit e Direção da Viés.",
+        camPos: { x: -1.8, y: 1.5, z: 2.8 },
+        lookAt: { x: -0.4, y: 0.9, z: 1.5 }
+      },
+      {
+        position: new THREE.Vector3(1.0, 1.0, 0.2),
+        title: "Porta Lateral & Estribo Automático",
+        tag: "Acesso Rápido",
+        desc: "Abertura lateral deslizante motorizada sincronizada com o estribo elétrico retrátil.",
+        msg: "Olá! Gostaria de cotação do Kit de Porta Lateral Deslizante com Estribo.",
+        camPos: { x: 3.2, y: 1.4, z: 0.2 },
+        lookAt: { x: 0.8, y: 1.0, z: 0.2 }
+      },
+      {
+        position: new THREE.Vector3(0, 1.88, 0.2),
+        title: "Climatizador de Teto & Giroflex",
+        tag: "Conforto & Segurança",
+        desc: "Unidade de ar-condicionado de teto para climatização homogênea do salão e barra de sinalização operacional LED.",
+        msg: "Olá! Gostaria de informações sobre Climatização e Sinalização LED.",
+        camPos: { x: 0, y: 2.8, z: 3.2 },
+        lookAt: { x: 0, y: 1.8, z: 0.8 }
+      },
+      {
+        position: new THREE.Vector3(0, 0.8, 0.5),
+        title: "Iluminação Interna LED & ISOFIX",
+        tag: "Habitabilidade Salão",
+        desc: "Luzes de teto em LED de alta eficiência, revestimento acústico lavável e ancoragens homologadas de 4 pontos.",
+        msg: "Olá! Solicito cotação para Adaptação de Salão e Iluminação Interna LED.",
+        camPos: { x: 1.8, y: 2.0, z: 1.0 },
+        lookAt: { x: 0, y: 0.8, z: 0.5 }
+      }
+    ];
+
+    // Project Hotspot 3D Vector to Screen 2D
+    function updateHotspots3D() {
+      hotspotsData.forEach((data, i) => {
+        const elem = document.getElementById(`hotspot-3d-${i + 1}`);
+        if (!elem) return;
+        const tempV = data.position.clone();
+        tempV.project(camera);
+
+        if (tempV.z > 1) {
+          elem.style.display = 'none';
+          return;
+        }
+
+        const x = (tempV.x * .5 + .5) * studioContainer.clientWidth;
+        const y = (tempV.y * -.5 + .5) * studioContainer.clientHeight;
+        elem.style.left = `${x}px`;
+        elem.style.top = `${y}px`;
+        elem.style.display = 'flex';
+      });
+    }
+
+    function selectHotspot3D(index) {
+      const data = hotspotsData[index];
+      targetCameraPos = data.camPos;
+      targetLookAt = data.lookAt;
+      controls.autoRotate = false;
+
+      document.getElementById('cardTag3D').innerText = data.tag;
+      document.getElementById('cardTitle3D').innerText = data.title;
+      document.getElementById('cardDesc3D').innerText = data.desc;
+      document.getElementById('cardCta3D').href = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(data.msg)}`;
+      document.getElementById('infoCard3D').classList.remove('translate-x-[450px]');
+    }
+
+    function closeInfoCard3D() {
+      document.getElementById('infoCard3D').classList.add('translate-x-[450px]');
+    }
+
+    // --- INTERACTIVE ACTIONS ---
+
+    // 1. Tour Cinemático Guiado
+    function toggleCinematicTour() {
+      isCinematicTourActive = !isCinematicTourActive;
+      const btn = document.getElementById('btnTour');
+      const lbl = document.getElementById('lblTour');
+
+      if (isCinematicTourActive) {
+        btn.classList.replace('bg-vies-orange', 'bg-vies-green');
+        lbl.innerText = "Parar Tour";
+        tourStep = 0;
+        runTourStep();
+      } else {
+        btn.classList.replace('bg-vies-green', 'bg-vies-orange');
+        lbl.innerText = "Tour Guiado";
+        if (tourTimer) clearTimeout(tourTimer);
+        resetCamera3D();
+      }
+    }
+
+    function runTourStep() {
+      if (!isCinematicTourActive) return;
+      selectHotspot3D(tourStep);
+
+      // Trigger automatic actions matching hotspots
+      if (tourStep === 0 && !swivelSeatOut) toggleSwivelSeat3D();
+      if (tourStep === 1 && !rampOpen) toggleRamp3D();
+      if (tourStep === 3 && !sideDoorOpen) toggleSideDoor3D();
+      if (tourStep === 4 && !giroflexOn) toggleBeacon3D();
+      if (tourStep === 5 && !isInteriorLEDOn) toggleInteriorLED3D();
+
+      tourStep = (tourStep + 1) % hotspotsData.length;
+      tourTimer = setTimeout(runTourStep, 5000);
+    }
+
+    // 2. Embarque / Desembarque Cadeira de Rodas
+    function toggleWheelchairBoarding() {
+      wheelchairBoarded = !wheelchairBoarded;
+      targetWcZ = wheelchairBoarded ? -2.6 : -0.8;
+      targetWcY = wheelchairBoarded ? 0.15 : 0.45;
+      
+      document.getElementById('btnWheelchair').classList.toggle('bg-vies-orange', wheelchairBoarded);
+      document.getElementById('lblWheelchair').innerText = wheelchairBoarded ? "Embarcar Cadeira" : "Desembarcar Cadeira";
+
+      if (wheelchairBoarded && !rampOpen) {
+        toggleRamp3D();
+      }
+      selectHotspot3D(1);
+    }
+
+    // 3. Banco Giratório
+    function toggleSwivelSeat3D() {
+      swivelSeatOut = !swivelSeatOut;
+      targetSwivelRotation = swivelSeatOut ? Math.PI / 2 : 0;
+      targetSwivelX = swivelSeatOut ? 0.35 : 0;
+      document.getElementById('btnSwivel').classList.toggle('bg-vies-orange', swivelSeatOut);
+      if (swivelSeatOut) {
+        if (!sideDoorOpen) toggleDoor3D();
+        selectHotspot3D(0);
+      }
+    }
+
+    // 4. Rampa Traseira
+    function toggleRamp3D() {
+      rampOpen = !rampOpen;
+      targetRampRotation = rampOpen ? 0.25 : 1.5;
+      document.getElementById('lblRamp').innerText = rampOpen ? "Fechar Rampa" : "Rampa Traseira";
+      document.getElementById('btnRamp').classList.toggle('bg-vies-orange', rampOpen);
+      if (rampOpen) selectHotspot3D(1);
+    }
+
+    // 5. Porta Lateral e Estribo
+    function toggleDoor3D() {
+      sideDoorOpen = !sideDoorOpen;
+      targetDoorZ = sideDoorOpen ? -0.8 : 0.2;
+      targetStepX = sideDoorOpen ? 1.15 : 0.85;
+      document.getElementById('btnDoor').classList.toggle('bg-vies-orange', sideDoorOpen);
+      if (sideDoorOpen && !swivelSeatOut) selectHotspot3D(3);
+    }
+
+    // 6. Modo Raio-X
+    function toggleXRay3D() {
+      isXray = !isXray;
+      document.getElementById('btnXRay').classList.toggle('bg-vies-orange', isXray);
+      bodyMat.transparent = isXray;
+      bodyMat.opacity = isXray ? 0.22 : 1.0;
+      bodyMat.wireframe = isXray;
+      if (isXray) selectHotspot3D(2);
+    }
+
+    // 7. Luzes Internas LED
+    function toggleInteriorLED3D() {
+      isInteriorLEDOn = !isInteriorLEDOn;
+      document.getElementById('btnInteriorLED').classList.toggle('bg-vies-orange', isInteriorLEDOn);
+      cabinLED.intensity = isInteriorLEDOn ? 3.5 : 0;
+      if (isInteriorLEDOn) selectHotspot3D(5);
+    }
+
+    // 8. Giroflex
+    function toggleBeacon3D() {
+      giroflexOn = !giroflexOn;
+      document.getElementById('btnBeacon').classList.toggle('bg-vies-orange', giroflexOn);
+      if (giroflexOn) selectHotspot3D(4);
+    }
+
+    // 9. Seletor de Cores da Carroceria
+    function changeColor3D(hexColor, btnElem) {
+      currentBodyColor = hexColor;
+      bodyMat.color.setHex(hexColor);
+    }
+
+    // 10. Seletor de Cor do Ring LED do Piso
+    function changeRingLED(hexColor) {
+      ringMat.color.setHex(hexColor);
+    }
+
+    function resetCamera3D() {
+      targetCameraPos = { x: 5.5, y: 2.8, z: 6.5 };
+      targetLookAt = { x: 0, y: 0.8, z: 0 };
+      closeInfoCard3D();
+    }
+
+    // Animation Render Loop
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Smooth Swivel Seat Rotation & Slide
+      seatBodyGroup.rotation.y += (targetSwivelRotation - seatBodyGroup.rotation.y) * 0.08;
+      swivelSeatGroup.position.x += ((0.4 + targetSwivelX) - swivelSeatGroup.position.x) * 0.08;
+
+      // Smooth Wheelchair Movement
+      wheelchairGroup.position.z += (targetWcZ - wheelchairGroup.position.z) * 0.06;
+      wheelchairGroup.position.y += (targetWcY - wheelchairGroup.position.y) * 0.06;
+
+      // Smooth Ramp Movement
+      rampPivot.rotation.x += (targetRampRotation - rampPivot.rotation.x) * 0.08;
+
+      // Side Door & Retracting Step
+      sideDoorGroup.position.z += (targetDoorZ - sideDoorGroup.position.z) * 0.08;
+      stepGroup.position.x += (targetStepX - stepGroup.position.x) * 0.08;
+
+      // Giroflex Beacon Flashing
+      if (giroflexOn) {
+        const flash = Math.sin(elapsedTime * 14) > 0 ? 4.5 : 0;
+        beaconLight.intensity = flash;
+        beaconMat.emissive.setHex(flash ? 0xff0000 : 0x330000);
+      } else {
+        beaconLight.intensity = 0;
+        beaconMat.emissive.setHex(0x330000);
+      }
+
+      // Smooth Camera Lerp
+      camera.position.x += (targetCameraPos.x - camera.position.x) * 0.05;
+      camera.position.y += (targetCameraPos.y - camera.position.y) * 0.05;
+      camera.position.z += (targetCameraPos.z - camera.position.z) * 0.05;
+
+      controls.target.x += (targetLookAt.x - controls.target.x) * 0.05;
+      controls.target.y += (targetLookAt.y - controls.target.y) * 0.05;
+      controls.target.z += (targetLookAt.z - controls.target.z) * 0.05;
+
+      controls.update();
+      updateHotspots3D();
+      renderer.render(scene, camera);
+    }
+
+    // Start 3D Loop on load
+    window.onload = function() {
+      animate();
+    };
+
+    // Canvas Responsive Resizing
+    window.addEventListener('resize', () => {
+      camera.aspect = studioContainer.clientWidth / studioContainer.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(studioContainer.clientWidth, studioContainer.clientHeight);
+    });
+  </script>
+</body>
+</html>
